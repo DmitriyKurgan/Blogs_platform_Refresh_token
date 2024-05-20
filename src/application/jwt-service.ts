@@ -1,7 +1,7 @@
 import {AccessTokenType, OutputUserType, UserDBType, UserType} from "../utils/types";
 import {ObjectId} from "mongodb";
 import jwt from 'jsonwebtoken';
-import {settings} from "../../settings";
+import {settings} from "../settings";
 
 export const jwtService:any = {
 
