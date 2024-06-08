@@ -20,8 +20,15 @@ authRouter.post('/login', validateAuthRequests, validateErrorsMiddleware, async 
       if (!user){
           return res.sendStatus(CodeResponsesEnum.Unauthorized_401)
       }
-    const token = await jwtService.createJWT(user);
-      res.status(CodeResponsesEnum.OK_200).send(token);
+     const token = await jwtService.createJWT(user);
+      res.status(CodeResponsesEnum.OK_200).send(token.accessToken);
+      res.cookie('refreshToken', token.refreshToken, {
+            httpOnly: true,
+            secure: true,
+            maxAge: 20 * 1000,
+            sameSite: 'strict'
+        });
+
 });
 
 authRouter.post('/registration',
