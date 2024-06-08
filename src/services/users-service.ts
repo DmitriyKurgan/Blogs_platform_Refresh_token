@@ -1,15 +1,19 @@
-import {OutputUserType, UserDBType} from "../utils/types";
+import {EazeUserType, OutputUserType, UserDBType} from "../utils/types";
 import {usersRepository} from "../repositories/users-repository";
 import bcrypt from 'bcrypt'
 import {ObjectId} from "mongodb";
-import {usersQueryRepository} from "../repositories/query-repositories/users-query-repository";
+import {
+    UserMapper,
+    UserSimpleMapper,
+    usersQueryRepository
+} from "../repositories/query-repositories/users-query-repository";
 import {v4 as uuidv4} from "uuid";
 import {add} from "date-fns/add";
-export const users = [] as OutputUserType[]
+export const users = [] as EazeUserType[]
 
 export const usersService:any = {
 
-    async createUser(login:string, email:string, password:string):Promise<OutputUserType | null> {
+    async createUser(login:string, email:string, password:string):Promise<EazeUserType | null> {
         const passwordSalt = await bcrypt.genSalt(10);
         console.log('passwordSalt: ', passwordSalt)
         const passwordHash = await this._generateHash(password, passwordSalt)
@@ -32,7 +36,7 @@ export const usersService:any = {
             },
         }
         const createdUser = await usersRepository.createUser(newUser);
-        return createdUser;
+        return createdUser
     },
    async deleteUser(userID:string): Promise<boolean>{
        return await usersRepository.deleteUser(userID);

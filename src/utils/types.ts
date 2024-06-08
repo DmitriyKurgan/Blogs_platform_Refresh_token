@@ -101,3 +101,10 @@ export type AccessToken = {
 
 
 export type TokenType = { accessToken: AccessToken; refreshToken: string }
+
+export type EazeUserType = {
+    id:any
+    email:string,
+    login:string,
+    createdAt:string|Date,
+}

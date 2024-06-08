@@ -1,4 +1,4 @@
-import {OutputUserType, UserDBType} from "../../utils/types";
+import {EazeUserType, OutputUserType, UserDBType} from "../../utils/types";
 import {ObjectId, WithId} from "mongodb";
 import {getUsersFromDB} from "../../utils/utils";
 import {usersCollection} from "../db";
@@ -9,12 +9,6 @@ export const UserMapper = (user : WithId<UserDBType>) : OutputUserType => {
         accountData:{...user.accountData},
         emailConfirmation:{...user.emailConfirmation},
     }
-}
-type EazeUserType = {
-    id:any
-    email:string,
-    login:string,
-    createdAt:string|Date,
 }
 export const UserSimpleMapper = (user : WithId<UserDBType>):EazeUserType =>{
     return {
