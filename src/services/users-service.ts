@@ -38,7 +38,7 @@ export const usersService:any = {
        return await usersRepository.deleteUser(userID);
     },
     async checkCredentials(loginOrEmail:string, password:string):Promise<OutputUserType | null> {
-        const user:OutputUserType | null = await usersQueryRepository.findByLoginOrEmail(loginOrEmail);
+        const user:OutputUserType | null = await usersRepository.findByLoginOrEmail(loginOrEmail);
         if (!user){
             return null
         }

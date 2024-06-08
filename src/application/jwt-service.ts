@@ -1,4 +1,4 @@
-import {AccessToken, OutputUserType, RefreshToken, TokenType} from "../utils/types";
+import {AccessToken, OutputUserType, TokenType} from "../utils/types";
 import {ObjectId} from "mongodb";
 import jwt from 'jsonwebtoken';
 import {settings} from "../settings";
@@ -10,9 +10,8 @@ export const jwtService:any = {
             accessToken: jwt.sign({ userId: user.id }, settings.JWT_SECRET, { expiresIn: '10s' })
         };
 
-        const refreshToken: RefreshToken = {
-            refreshToken: jwt.sign({ userId: user.id }, settings.JWT_SECRET, { expiresIn: '20s' })
-        };
+        const refreshToken = jwt.sign({ userId: user.id }, settings.JWT_SECRET, { expiresIn: '20s' })
+
         return { accessToken, refreshToken };
     },
     async getUserIdByToken(token:string):Promise<ObjectId | null>{

@@ -70,7 +70,6 @@ export type EmailConfirmationType = {
 
 
 export type OutputUserType = UserType & {id:string}
-//export type OutputUserAccountType = UserAccountType & {id:string}
 
 export type CommentType = {
     postId?:string
@@ -100,8 +99,5 @@ export type AccessToken = {
     accessToken: string;
 };
 
-export type RefreshToken = {
-    refreshToken: string;
-};
 
-export type TokenType = { accessToken: AccessToken; refreshToken: RefreshToken }
+export type TokenType = { accessToken: AccessToken; refreshToken: string }

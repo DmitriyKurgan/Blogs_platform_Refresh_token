@@ -13,6 +13,7 @@ import {blogsQueryRepository} from "../repositories/query-repositories/blogs-que
 import {commentsQueryRepository} from "../repositories/query-repositories/comments-query-repository";
 import {comments, commentsService} from "../services/comments-service";
 import {usersQueryRepository} from "../repositories/query-repositories/users-query-repository";
+import {usersRepository} from "../repositories/users-repository";
 
 export const postsRouter = Router({});
 
@@ -87,7 +88,7 @@ postsRouter.post('/:id/comments',
     if (!post){
         return res.sendStatus(CodeResponsesEnum.Not_found_404);
     }
-    const user = await usersQueryRepository.findUserByID(req.userId!)
+    const user = await usersRepository.findUserByID(req.userId!)
     const newComment: OutputCommentType| null = await commentsService.createComment(req.body, post.id, req.userId, user!.accountData.userName);
     if (!newComment) {
         return

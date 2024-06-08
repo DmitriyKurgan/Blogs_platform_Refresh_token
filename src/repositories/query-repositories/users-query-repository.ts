@@ -10,6 +10,21 @@ export const UserMapper = (user : WithId<UserDBType>) : OutputUserType => {
         emailConfirmation:{...user.emailConfirmation},
     }
 }
+type EazeUserType = {
+    id:any
+    email:string,
+    login:string,
+    createdAt:string|Date,
+}
+export const UserSimpleMapper = (user : WithId<UserDBType>):EazeUserType =>{
+    return {
+        id: user._id.toString(),
+        email:user.accountData.email,
+        login:user.accountData.userName,
+        createdAt:user.accountData.createdAt,
+    }
+}
+
 
 
 export const usersQueryRepository = {
@@ -18,10 +33,10 @@ export const usersQueryRepository = {
     },
     async findByLoginOrEmail(loginOrEmail:string){
         const user = await usersCollection.findOne({$or: [{"accountData.userName":loginOrEmail}, {"accountData.email":loginOrEmail}]})
-        return user ? UserMapper(user) : null
+        return user ? UserSimpleMapper(user) : null
 },
     async findUserByID(userID:string){
         const user = await usersCollection.findOne({_id: new ObjectId(userID)})
-        return user
+        return user ? UserSimpleMapper(user) : null
     }
 }

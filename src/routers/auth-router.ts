@@ -12,6 +12,7 @@ import {usersQueryRepository} from "../repositories/query-repositories/users-que
 import {authService} from "../services/auth-service";
 import {emailService} from "../services/email-service";
 import {OutputUserType} from "../utils/types";
+import {usersRepository} from "../repositories/users-repository";
 
 export const authRouter = Router({});
 
@@ -76,7 +77,7 @@ authRouter.get('/me', authMiddleware, async (req: Request, res: Response) => {
     if (!myID){
         return res.sendStatus(CodeResponsesEnum.Unauthorized_401);
     }
-    const user = await usersQueryRepository.findUserByID(myID);
+    const user = await usersRepository.findUserByID(myID);
     if (!user){
         return res.sendStatus(CodeResponsesEnum.Unauthorized_401)
     }
