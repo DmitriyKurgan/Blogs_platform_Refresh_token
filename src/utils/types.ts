@@ -96,6 +96,12 @@ export type PostsServiceType = {
     deletePost(postID: string): Promise<boolean>
 }
 
-export type AccessTokenType = {
-    accessToken:string
-}
+export type AccessToken = {
+    accessToken: string;
+};
+
+export type RefreshToken = {
+    refreshToken: string;
+};
+
+export type TokenType = { accessToken: AccessToken; refreshToken: RefreshToken }

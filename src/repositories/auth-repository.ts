@@ -1,7 +1,5 @@
-import {InsertOneResult, ObjectId, DeleteResult, UpdateResult} from "mongodb";
-import {OutputUserType, UserDBType} from "../utils/types";
+import {ObjectId, DeleteResult, UpdateResult} from "mongodb";
 import {usersCollection} from "./db";
-import {UserMapper} from "./query-repositories/users-query-repository";
 
 export const authRepository = {
    async deleteUser(userID:string): Promise<boolean>{
