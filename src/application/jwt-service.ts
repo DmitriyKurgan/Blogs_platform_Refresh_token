@@ -21,6 +21,18 @@ export const jwtService:any = {
         } catch (e:unknown) {
             return null
         }
+    },
+    async verifyToken(token: string) {
+        try {
+            return jwt.verify(token, settings.JWT_SECRET) as {
+                userId: number;
+                deviceId: string;
+                iat: number;
+                exp: number;
+            };
+        } catch (error) {
+            return null;
+        }
     }
 
 }
