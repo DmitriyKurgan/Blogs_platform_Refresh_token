@@ -22,13 +22,15 @@ authRouter.post('/login', validateAuthRequests, validateErrorsMiddleware, async 
           return res.sendStatus(CodeResponsesEnum.Unauthorized_401)
       }
      const token = await jwtService.createJWT(user);
-      res.status(CodeResponsesEnum.OK_200).send(token.accessToken);
-      res.cookie('refreshToken', token.refreshToken, {
+      res
+          .cookie('refreshToken', token.refreshToken, {
             httpOnly: true,
             secure: true,
             maxAge: 20 * 1000,
             sameSite: 'strict'
-        });
+        })
+          .status(CodeResponsesEnum.OK_200)
+          .send(token.accessToken);
 
 });
 
