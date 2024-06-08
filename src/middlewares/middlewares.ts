@@ -341,6 +341,8 @@ export const validationRefreshToken = async (
     res: Response,
     next: NextFunction
 ) => {
+    debugger
+    console.log('REQ: ', req)
     const cookieRefreshToken = req.cookies.refreshToken;
 
     if (!cookieRefreshToken) {
