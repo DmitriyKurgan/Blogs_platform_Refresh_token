@@ -2,7 +2,8 @@ import {Request, Response, Router} from "express";
 import {usersService} from "../services/users-service";
 import {CodeResponsesEnum} from "../utils/utils";
 import {
-    authMiddleware, validateAuthorization,
+    authMiddleware,
+    validateAuthorization,
     validateAuthRequests,
     validateEmailResendingRequests,
     validateErrorsMiddleware,
@@ -61,62 +62,60 @@ authRouter.post('/refresh-token', validationRefreshToken, async (req: Request, r
     }
 });
 
-
-    authRouter.post('/registration',
-        validateUsersRequests,
-        validationUserUnique("email"),
-        validationUserUnique("login"),
-        validateErrorsMiddleware,
-        async (req: Request, res: Response) => {
-            const userAccount: OutputUserType | null = await usersService.createUser(req.body.login, req.body.email, req.body.password);
-            if (!userAccount || !userAccount.emailConfirmation.confirmationCode) {
-                return res.sendStatus(CodeResponsesEnum.Not_found_404)
-            }
-            const gmailResponse = await emailService.sendEmail(userAccount, userAccount.emailConfirmation.confirmationCode);
-            if (!gmailResponse) {
-                return res.sendStatus(CodeResponsesEnum.Not_found_404)
-            }
-            res.sendStatus(CodeResponsesEnum.Not_content_204)
-        });
-    authRouter.post('/registration-confirmation',
-        validateRegistrationConfirmationRequests,
-        validationEmailConfirm,
-        validateErrorsMiddleware,
-        async (req: Request, res: Response) => {
-            const confirmationCode = req.body.code;
-            const confirmationResult = authService.confirmRegistration(confirmationCode);
-            if (!confirmationResult) {
-                return res.sendStatus(CodeResponsesEnum.Incorrect_values_400);
-            }
-            res.sendStatus(CodeResponsesEnum.Not_content_204);
-        });
-    authRouter.post('/registration-email-resending',
-        validateEmailResendingRequests,
-        validationEmailResend,
-        validateErrorsMiddleware, async (req: Request, res: Response) => {
-            debugger
-            const userEmail = req.body.email;
-            const confirmationCodeUpdatingResult = await authService.resendEmail(userEmail);
-            debugger
-            if (!confirmationCodeUpdatingResult) return;
-            res.sendStatus(CodeResponsesEnum.Not_content_204);
-        });
-
-    authRouter.get('/me', authMiddleware, async (req: Request, res: Response) => {
-        const myID = req.userId
-        if (!myID) {
-            return res.sendStatus(CodeResponsesEnum.Unauthorized_401);
+authRouter.post('/registration',
+    validateUsersRequests,
+    validationUserUnique("email"),
+    validationUserUnique("login"),
+    validateErrorsMiddleware,
+    async (req: Request, res: Response) => {
+        const userAccount: OutputUserType | null = await usersService.createUser(req.body.login, req.body.email, req.body.password);
+        if (!userAccount || !userAccount.emailConfirmation.confirmationCode) {
+            return res.sendStatus(CodeResponsesEnum.Not_found_404)
         }
-        const user = await usersRepository.findUserByID(myID);
-        if (!user) {
-            return res.sendStatus(CodeResponsesEnum.Unauthorized_401)
+        const gmailResponse = await emailService.sendEmail(userAccount, userAccount.emailConfirmation.confirmationCode);
+        if (!gmailResponse) {
+            return res.sendStatus(CodeResponsesEnum.Not_found_404)
         }
-        res.status(CodeResponsesEnum.OK_200).send({
-            email: user.accountData.email,
-            login: user.accountData.userName,
-            userId: myID
-        })
+        res.sendStatus(CodeResponsesEnum.Not_content_204)
     });
+authRouter.post('/registration-confirmation',
+    validateRegistrationConfirmationRequests,
+    validationEmailConfirm,
+    validateErrorsMiddleware,
+    async (req: Request, res: Response) => {
+        const confirmationCode = req.body.code;
+        const confirmationResult = authService.confirmRegistration(confirmationCode);
+        if (!confirmationResult) {
+            return res.sendStatus(CodeResponsesEnum.Incorrect_values_400);
+        }
+        res.sendStatus(CodeResponsesEnum.Not_content_204);
+    });
+authRouter.post('/registration-email-resending',
+    validateEmailResendingRequests,
+    validationEmailResend,
+    validateErrorsMiddleware, async (req: Request, res: Response) => {
+        const userEmail = req.body.email;
+        const confirmationCodeUpdatingResult = await authService.resendEmail(userEmail);
+        debugger
+        if (!confirmationCodeUpdatingResult) return;
+        res.sendStatus(CodeResponsesEnum.Not_content_204);
+    });
+
+authRouter.get('/me', authMiddleware, async (req: Request, res: Response) => {
+    const myID = req.userId
+    if (!myID) {
+        return res.sendStatus(CodeResponsesEnum.Unauthorized_401);
+    }
+    const user = await usersRepository.findUserByID(myID);
+    if (!user) {
+        return res.sendStatus(CodeResponsesEnum.Unauthorized_401)
+    }
+    res.status(CodeResponsesEnum.OK_200).send({
+        email: user.accountData.email,
+        login: user.accountData.userName,
+        userId: myID
+    })
+});
 
 authRouter.post('/logout', async (req: Request, res: Response) => {
     const cookieRefreshToken = req.cookies.refreshToken;
