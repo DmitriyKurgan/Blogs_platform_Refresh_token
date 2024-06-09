@@ -55,7 +55,7 @@ authRouter.post('/refresh-token', validationRefreshToken, async (req: Request, r
                 httpOnly: true,
                 secure: true,
             })
-            .sendStatus(200)
+            .status(200)
             .json(newAccessToken);
     } else {
         res.sendStatus(401);
