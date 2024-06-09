@@ -40,7 +40,6 @@ authRouter.post('/login', validateAuthRequests, validateErrorsMiddleware, async 
 });
 
 authRouter.post('/refresh-token', validationRefreshToken, async (req: Request, res: Response) => {
-debugger
     const cookieRefreshToken = req.cookies.refreshToken;
     const cookieRefreshTokenObj = await jwtService.verifyToken(
         cookieRefreshToken
@@ -118,3 +117,14 @@ debugger
         })
     });
 
+authRouter.post('/logout', async (req: Request, res: Response) => {
+    const cookieRefreshToken = req.cookies.refreshToken;
+    const cookieRefreshTokenObj = await jwtService.verifyToken(
+        cookieRefreshToken
+    );
+    if (cookieRefreshTokenObj) {
+        res.sendStatus(204);
+    } else {
+        res.sendStatus(401);
+    }
+});
