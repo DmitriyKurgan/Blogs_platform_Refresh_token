@@ -108,3 +108,7 @@ export type EazeUserType = {
     login:string,
     createdAt:string|Date,
 }
+
+export type MongoRefreshTokenType = {
+    refreshToken: string;
+};

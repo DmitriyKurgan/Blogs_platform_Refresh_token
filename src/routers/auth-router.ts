@@ -2,7 +2,7 @@ import {Request, Response, Router} from "express";
 import {usersService} from "../services/users-service";
 import {CodeResponsesEnum} from "../utils/utils";
 import {
-    authMiddleware,
+    authMiddleware, validateAuthorization,
     validateAuthRequests,
     validateEmailResendingRequests,
     validateErrorsMiddleware,
@@ -18,6 +18,8 @@ import {authService} from "../services/auth-service";
 import {emailService} from "../services/email-service";
 import {OutputUserType} from "../utils/types";
 import {usersRepository} from "../repositories/users-repository";
+import {tokensService} from "../services/tokens-service";
+import {usersQueryRepository} from "../repositories/query-repositories/users-query-repository";
 
 export const authRouter = Router({});
 
@@ -40,24 +42,23 @@ authRouter.post('/login', validateAuthRequests, validateErrorsMiddleware, async 
 });
 
 authRouter.post('/refresh-token', validationRefreshToken, async (req: Request, res: Response) => {
-    const cookieRefreshToken = req.cookies.refreshToken;
-    const cookieRefreshTokenObj = await jwtService.verifyToken(
-        cookieRefreshToken
-    );
-
-    const userId = cookieRefreshTokenObj!.userId.toString();
-    const user = await usersRepository.findUserByID(userId);
-
-    const newAccessToken = (await jwtService.createJWT(user)).accessToken;
-    const newRefreshToken = (await jwtService.createJWT(user)).refreshToken;
-
-    res
-        .cookie('refreshToken', newRefreshToken, {
-            httpOnly: true,
-            secure: true,
-        })
-        .status(200)
-        .json(newAccessToken);
+    const refreshToken = req.cookies.refreshToken;
+    const userId = await jwtService.getUserIdByToken(refreshToken);
+    if (userId) {
+        await tokensService.createNewBlacklistedRefreshToken(refreshToken);
+        const user = await usersQueryRepository.findUserByID(userId);
+        const newAccessToken = (await jwtService.createJWT(user)).accessToken;
+        const newRefreshToken = (await jwtService.createJWT(user)).refreshToken;
+        res
+            .cookie("refreshToken", newRefreshToken, {
+                httpOnly: true,
+                secure: true,
+            })
+            .sendStatus(200)
+            .json(newAccessToken);
+    } else {
+        res.sendStatus(401);
+    }
 });
 
 
@@ -126,5 +127,14 @@ authRouter.post('/logout', async (req: Request, res: Response) => {
         res.sendStatus(204);
     } else {
         res.sendStatus(401);
+    }
+});
+
+authRouter.delete("/tokens", validateAuthorization, async (req: Request, res: Response) => {
+    const isDeleted = await tokensService.deleteAll();
+    if (isDeleted) {
+        res.sendStatus(204);
+    } else {
+        res.sendStatus(404);
     }
 });

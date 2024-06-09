@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
-import {body, param, ValidationError, validationResult} from 'express-validator';
+import {body, cookie, param, ValidationError, validationResult} from 'express-validator';
 import {blogsQueryRepository} from "../repositories/query-repositories/blogs-query-repository";
 import {usersQueryRepository} from "../repositories/query-repositories/users-query-repository";
 import {commentsQueryRepository} from "../repositories/query-repositories/comments-query-repository";
 import {CodeResponsesEnum} from "../utils/utils";
 import {jwtService} from "../application/jwt-service";
 import {authQueryRepository} from "../repositories/query-repositories/auth-query-repository";
+import {tokensQueryRepository} from "../repositories/query-repositories/tokens-query-repository";
 const websiteUrlPattern =
     /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/;
 const loginPattern =
@@ -336,28 +337,28 @@ export const validationUserUnique = (field: string) =>
         return true;
     });
 
-export const validationRefreshToken = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
-    debugger
-    console.log('REQ: ', req)
-    const cookieRefreshToken = req.cookies.refreshToken;
-
-    if (!cookieRefreshToken) {
-        res.sendStatus(401);
-        return;
-    }
-
-    const cookieRefreshTokenObj = await jwtService.verifyToken(
-        cookieRefreshToken
-    );
-
-    if (!cookieRefreshTokenObj) {
-        res.sendStatus(401);
-        return;
-    }
+// export const validationRefreshToken = async (
+//     req: Request,
+//     res: Response,
+//     next: NextFunction
+// ) => {
+//     debugger
+//     console.log('REQ: ', req)
+//     const cookieRefreshToken = req.cookies.refreshToken;
+//
+//     if (!cookieRefreshToken) {
+//         res.sendStatus(401);
+//         return;
+//     }
+//
+//     const cookieRefreshTokenObj = await jwtService.verifyToken(
+//         cookieRefreshToken
+//     );
+//
+//     if (!cookieRefreshTokenObj) {
+//         res.sendStatus(401);
+//         return;
+//     }
 
     // const deviceId = cookieRefreshTokenObj.deviceId;
     // const cookieRefreshTokenIat = cookieRefreshTokenObj.iat;
@@ -374,5 +375,29 @@ export const validationRefreshToken = async (
     //     return;
     // }
 
-    next();
+//     next();
+// };
+
+export const validationRefreshToken = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const refreshToken = req.cookies.refreshToken;
+
+    console.log(refreshToken)
+
+    if (!refreshToken) {
+        res.sendStatus(401);
+        return;
+    }
+
+    const findTokenInBlackList = await tokensQueryRepository.findBlackListedToken(
+        refreshToken
+    );
+    if (!findTokenInBlackList) {
+        next();
+    } else {
+        res.sendStatus(401);
+    }
 };

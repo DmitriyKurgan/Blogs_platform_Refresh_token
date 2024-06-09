@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
 import dotenv from 'dotenv'
-import {BLogType, CommentType, PostType, UserDBType} from "../utils/types";
+import {BLogType, CommentType, MongoRefreshTokenType, PostType, UserDBType} from "../utils/types";
 dotenv.config()
 
 const mongoURI = process.env.MONGO_URL || "mongodb+srv://dimakurgan123789:annogolik123789@blogsplatform.mxifx0s.mongodb.net/?retryWrites=true&w=majority&appName=BlogsPlatform"
@@ -12,6 +12,8 @@ export const blogsCollection =  client.db('learning').collection<BLogType>('blog
 export const postsCollection =  client.db('learning').collection<PostType>('posts')
 export const usersCollection =  client.db('learning').collection<UserDBType>('users')
 export const commentsCollection =  client.db('learning').collection<CommentType>('comments')
+
+export const refreshTokensBlacklistCollection =  client.db('learning').collection<MongoRefreshTokenType>("refresh-tokens-blacklist");
 export async function runDB (){
     try {
         await client.connect();
