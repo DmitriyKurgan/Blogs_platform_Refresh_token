@@ -12,7 +12,6 @@ export const blogsCollection =  client.db('learning').collection<BLogType>('blog
 export const postsCollection =  client.db('learning').collection<PostType>('posts')
 export const usersCollection =  client.db('learning').collection<UserDBType>('users')
 export const commentsCollection =  client.db('learning').collection<CommentType>('comments')
-
 export const refreshTokensBlacklistCollection =  client.db('learning').collection<MongoRefreshTokenType>("refresh-tokens-blacklist");
 export async function runDB (){
     try {

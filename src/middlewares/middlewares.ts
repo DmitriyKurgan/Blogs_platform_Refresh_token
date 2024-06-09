@@ -383,6 +383,7 @@ export const validationRefreshToken = async (
     res: Response,
     next: NextFunction
 ) => {
+    debugger
     const refreshToken = req.cookies.refreshToken;
 
     console.log(refreshToken)

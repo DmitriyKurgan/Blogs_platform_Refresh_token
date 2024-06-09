@@ -42,8 +42,11 @@ authRouter.post('/login', validateAuthRequests, validateErrorsMiddleware, async 
 });
 
 authRouter.post('/refresh-token', validationRefreshToken, async (req: Request, res: Response) => {
+
+    debugger
     const refreshToken = req.cookies.refreshToken;
     const userId = await jwtService.getUserIdByToken(refreshToken);
+    debugger
     if (userId) {
         await tokensService.createNewBlacklistedRefreshToken(refreshToken);
         const user = await usersQueryRepository.findUserByID(userId);
