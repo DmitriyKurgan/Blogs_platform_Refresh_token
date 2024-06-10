@@ -383,7 +383,7 @@ export const validationRefreshToken = async (
     res: Response,
     next: NextFunction
 ) => {
-    const refreshToken = req.cookies.refreshToken;
+    const refreshToken = req?.cookies?.refreshToken;
     console.log(refreshToken)
     if (!refreshToken) {
         res.sendStatus(401);
@@ -393,9 +393,10 @@ export const validationRefreshToken = async (
     const findTokenInBlackList = await tokensQueryRepository.findBlackListedToken(
         refreshToken
     );
+    console.log('findTokenInBlackList_MIDDLEWARE: ', findTokenInBlackList)
     if (!findTokenInBlackList) {
-        next();
+      return  next();
     } else {
-        res.sendStatus(401);
+      return   res.sendStatus(401);
     }
 };

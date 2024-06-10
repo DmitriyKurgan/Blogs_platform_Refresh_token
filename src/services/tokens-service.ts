@@ -11,7 +11,6 @@ export const tokensService = {
             _id: new ObjectId(),
             refreshToken,
         };
-
         return blacklistedTokensRepository.createNewToken(newToken);
     },
 

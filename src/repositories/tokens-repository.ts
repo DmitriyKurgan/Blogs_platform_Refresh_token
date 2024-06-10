@@ -7,6 +7,7 @@ export const blacklistedTokensRepository = {
         newToken: MongoRefreshTokenType
     ): Promise<MongoRefreshTokenType> {
         await refreshTokensBlacklistCollection.insertOne(newToken);
+        console.log('newToken: ', newToken)
         return newToken;
     },
 
