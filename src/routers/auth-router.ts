@@ -118,7 +118,7 @@ authRouter.get('/me', authMiddleware, async (req: Request, res: Response) => {
     })
 });
 
-authRouter.post('/logout', async (req: Request, res: Response) => {
+authRouter.post('/logout', validateAuthorization, async (req: Request, res: Response) => {
     const cookieRefreshToken = req.cookies.refreshToken;
     const cookieRefreshTokenObj = await jwtService.verifyToken(
         cookieRefreshToken
@@ -131,7 +131,7 @@ authRouter.post('/logout', async (req: Request, res: Response) => {
     }
 });
 
-authRouter.delete("/tokens", validateAuthorization, async (req: Request, res: Response) => {
+authRouter.delete("/tokens", async (req: Request, res: Response) => {
     const isDeleted = await tokensService.deleteAll();
     if (isDeleted) {
         res.sendStatus(204);
