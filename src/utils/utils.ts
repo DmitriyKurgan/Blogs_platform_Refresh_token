@@ -3,7 +3,7 @@ import {BLogMapper} from "../repositories/query-repositories/blogs-query-reposit
 import {BLogType, CommentType, PostType, UserType} from "./types";
 import {WithId} from "mongodb";
 import {blogsCollection, commentsCollection, postsCollection, usersCollection} from "../repositories/db";
-import {UserMapper} from "../repositories/query-repositories/users-query-repository";
+import {UserMapper, UserSimpleMapper} from "../repositories/query-repositories/users-query-repository";
 import {CommentMapper} from "../repositories/query-repositories/comments-query-repository";
 
 export enum CodeResponsesEnum {
@@ -166,7 +166,7 @@ export const getUsersFromDB = async (query:any) => {
             page: query.pageNumber,
             pageSize: query.pageSize,
             totalCount,
-            items: items.map((user:WithId<UserType>) => UserMapper(user)),
+            items: items.map((user:WithId<UserType>) => UserSimpleMapper(user)),
         };
     } catch (e) {
         console.log(e);

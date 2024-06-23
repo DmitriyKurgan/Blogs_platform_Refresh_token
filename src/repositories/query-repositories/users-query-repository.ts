@@ -15,7 +15,7 @@ export const UserSimpleMapper = (user : WithId<UserDBType>):EazeUserType =>{
         id: user._id.toString(),
         email:user.accountData.email,
         login:user.accountData.userName,
-        createdAt:user.accountData.createdAt,
+        createdAt:user.accountData.createdAt.toString(),
     }
 }
 
