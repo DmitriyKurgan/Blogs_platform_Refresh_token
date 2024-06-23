@@ -1,6 +1,4 @@
 import {ObjectId} from "mongodb";
-import {v4 as uuidv4} from "uuid";
-import {add} from "date-fns/add";
 
 export type BLogType = {
     name: string
@@ -24,35 +22,15 @@ export type PostType = {
 export type OutputPostType = PostType & {id:string}
 
 export type UserType = {
-    // login: string
-    // email: string
-    // createdAt: Date | string
     accountData: AccountDataType,
     emailConfirmation: EmailConfirmationType
 }
 
-// export type UserAccountType = {
-//     accountData: AccountDataType,
-//     emailConfirmation: EmailConfirmationType
-// }
-
 export type UserDBType = {
-    // _id: ObjectId
-    // login: string
-    // email: string
-    // passwordSalt: string
-    // passwordHash: string
-    // createdAt: Date | string
     _id: ObjectId
     accountData: AccountDataType,
     emailConfirmation: EmailConfirmationType
 }
-
-// export type UserAccountDBType = {
-//     _id: ObjectId
-//     accountData: AccountDataType,
-//     emailConfirmation: EmailConfirmationType
-// }
 
 export type AccountDataType = {
     userName: string
