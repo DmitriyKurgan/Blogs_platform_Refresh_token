@@ -96,9 +96,9 @@ import {
   usersURI,
 } from "../../src/test-utils/test-strings";
 import { emptyOutput } from "../../src/test-utils/test-objects";
-import request from "supertest";
 import {app} from "../../src/app_settings";
 import {client} from "../../src/repositories/db";
+import request from "supertest";
 
 afterAll(async () => {
   await client.close();

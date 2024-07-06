@@ -362,7 +362,7 @@ export const userReturner = async (
     id: string = expect.any(String),
     login: string = userLoginString,
     email: string = userEmailString,
-    createdAt: string = expect.any(String)
+    createdAt: string = expect.any(Date)
 ) => {
     return {
         id,
