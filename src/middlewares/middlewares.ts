@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import {body, cookie, param, ValidationError, validationResult} from 'express-validator';
+import {body, param, ValidationError, validationResult} from 'express-validator';
 import {blogsQueryRepository} from "../repositories/query-repositories/blogs-query-repository";
 import {usersQueryRepository} from "../repositories/query-repositories/users-query-repository";
 import {commentsQueryRepository} from "../repositories/query-repositories/comments-query-repository";

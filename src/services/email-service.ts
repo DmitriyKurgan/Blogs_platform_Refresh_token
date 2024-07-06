@@ -16,7 +16,6 @@ export const emailService:any = {
             return gmailResponse
         } catch (error) {
             console.error(error);
-           // await authService.deleteUser(userAccount.id);
             return null;
         }
     },

@@ -6,7 +6,7 @@ import {
 } from "../middlewares/middlewares";
 import {users, usersService} from "../services/users-service";
 import {usersQueryRepository} from "../repositories/query-repositories/users-query-repository";
-import {EazeUserType, OutputUserType} from "../utils/types";
+import {EazeUserType} from "../utils/types";
 
 export const usersRouter = Router({});
 

@@ -1,10 +1,5 @@
-import {OutputUserType, UserDBType} from "../utils/types";
-import {usersRepository} from "../repositories/users-repository";
+import {OutputUserType} from "../utils/types";
 import bcrypt from 'bcrypt'
-import {ObjectId, WithId} from "mongodb";
-import {usersQueryRepository} from "../repositories/query-repositories/users-query-repository";
-import {v4 as uuidv4} from 'uuid'
-import {add} from "date-fns/add";
 import {authRepository} from "../repositories/auth-repository";
 import {authQueryRepository} from "../repositories/query-repositories/auth-query-repository";
 import {randomUUID} from "crypto";

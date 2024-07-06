@@ -1,6 +1,6 @@
 import {usersCollection} from "./db";
-import {InsertOneResult, ObjectId, DeleteResult, WithId} from "mongodb";
-import {EazeUserType, OutputUserType, UserDBType, UserType} from "../utils/types";
+import {InsertOneResult, ObjectId, DeleteResult} from "mongodb";
+import {EazeUserType, UserDBType} from "../utils/types";
 import {UserMapper, UserSimpleMapper} from "./query-repositories/users-query-repository";
 
 export const usersRepository = {

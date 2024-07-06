@@ -19,8 +19,6 @@ export const UserSimpleMapper = (user : WithId<UserDBType>):EazeUserType =>{
     }
 }
 
-
-
 export const usersQueryRepository = {
     async getAllUsers(query: any): Promise<any | { error: string }> {
         return getUsersFromDB(query);
